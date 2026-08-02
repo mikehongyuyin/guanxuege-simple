@@ -1,0 +1,69 @@
+# 观学阁（单体版）一键启动编排
+#
+# 首次构建并启动（含后端单体 + 前端）：
+#   docker compose up -d --build
+# 之后仅启动（用已构建镜像）：
+#   docker compose up -d
+# 查看日志：docker compose logs -f app
+# 停止并清理：docker compose down
+#
+# 说明：
+#   - 不再使用 Nacos / Gateway / RocketMQ，单体应用直接连接 MySQL 与 Redis
+#   - 容器间按服务名互访：mysql / redis / app
+#   - 业务服务通过环境变量 MYSQL_HOST / REDIS_HOST 指向中间件
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: gx-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: guanxuege
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    volumes:
+      - ./backend/sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7.0
+    container_name: gx-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ===================== 后端单体应用 =====================
+  app:
+    build: ./backend
+    image: gx-app
+    container_name: gx-app
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: mysql
+      REDIS_HOST: redis
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ===================== 前端 =====================
+  frontend:
+    build: ./frontend
+    image: gx-frontend
+    container_name: gx-frontend
+    ports:
+      - "8088:80"
+    depends_on:
+      - app

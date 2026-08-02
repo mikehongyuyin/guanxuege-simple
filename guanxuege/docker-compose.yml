@@ -1,0 +1,221 @@
+# 观学阁 一键启动编排
+#
+# 默认（仅中间件，向后兼容）：
+#   docker compose up -d
+#
+# 全栈（含 5 个后端微服务 + 前端，首次会构建镜像）：
+#   docker compose --profile app up -d --build
+#
+# 查看日志：docker compose logs -f <服务名>
+# 停止并清理：docker compose down
+#
+# 说明：
+#   - 所有容器在同一默认网络，按服务名互访（mysql / redis / rocketmq-namesrv / nacos / gateway）
+#   - 业务服务通过环境变量 MYSQL_HOST / REDIS_HOST / ROCKETMQ_ADDR / NACOS_ADDR 指向中间件
+#   - 本地（非容器）运行时这些变量缺省为 127.0.0.1，行为与改造前一致
+
+services:
+  # ===================== 中间件（默认启动） =====================
+  mysql:
+    image: mysql:8.0
+    container_name: gx-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: guanxuege
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    volumes:
+      - ./backend/sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7.0
+    container_name: gx-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  rocketmq-namesrv:
+    image: apache/rocketmq:5.1.4
+    container_name: gx-rmq-namesrv
+    ports:
+      - "9876:9876"
+    command: ["sh", "mqnamesrv"]
+    healthcheck:
+      test: ["CMD", "sh", "-c", "echo > /dev/tcp/127.0.0.1/9876"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  rocketmq-broker:
+    image: apache/rocketmq:5.1.4
+    container_name: gx-rmq-broker
+    ports:
+      - "10911:10911"
+      - "10909:10909"
+    environment:
+      NAMESRV_ADDR: rocketmq-namesrv:9876
+    volumes:
+      - ./rocketmq/broker.conf:/home/rocketmq/rocketmq-5.1.4/conf/broker.conf
+    command: ["sh", "mqbroker", "-n", "rocketmq-namesrv:9876", "-c", "/home/rocketmq/rocketmq-5.1.4/conf/broker.conf"]
+    depends_on:
+      - rocketmq-namesrv
+
+  nacos:
+    image: nacos/nacos-server:v2.3.0
+    container_name: gx-nacos
+    environment:
+      MODE: standalone
+      NACOS_AUTH_ENABLE: false
+    ports:
+      - "8848:8848"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8848/nacos/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+
+  # ===================== 后端微服务（profile: app） =====================
+  gateway:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        SERVICE: gateway
+    image: gx-gateway
+    container_name: gx-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      NACOS_ADDR: nacos:8848
+    depends_on:
+      nacos:
+        condition: service_healthy
+      auth:
+        condition: service_started
+      learning-plan:
+        condition: service_started
+      grade:
+        condition: service_started
+      community:
+        condition: service_started
+    profiles: ["app"]
+
+  auth:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        SERVICE: auth
+    image: gx-auth
+    container_name: gx-auth
+    environment:
+      MYSQL_HOST: mysql
+      REDIS_HOST: redis
+      ROCKETMQ_ADDR: rocketmq-namesrv:9876
+      NACOS_ADDR: nacos:8848
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rocketmq-namesrv:
+        condition: service_healthy
+      nacos:
+        condition: service_healthy
+    profiles: ["app"]
+
+  learning-plan:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        SERVICE: learning-plan
+    image: gx-learning-plan
+    container_name: gx-learning-plan
+    environment:
+      MYSQL_HOST: mysql
+      REDIS_HOST: redis
+      ROCKETMQ_ADDR: rocketmq-namesrv:9876
+      NACOS_ADDR: nacos:8848
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rocketmq-namesrv:
+        condition: service_healthy
+      nacos:
+        condition: service_healthy
+    profiles: ["app"]
+
+  grade:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        SERVICE: grade
+    image: gx-grade
+    container_name: gx-grade
+    environment:
+      MYSQL_HOST: mysql
+      REDIS_HOST: redis
+      ROCKETMQ_ADDR: rocketmq-namesrv:9876
+      NACOS_ADDR: nacos:8848
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rocketmq-namesrv:
+        condition: service_healthy
+      nacos:
+        condition: service_healthy
+    profiles: ["app"]
+
+  community:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        SERVICE: community
+    image: gx-community
+    container_name: gx-community
+    environment:
+      MYSQL_HOST: mysql
+      REDIS_HOST: redis
+      ROCKETMQ_ADDR: rocketmq-namesrv:9876
+      NACOS_ADDR: nacos:8848
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rocketmq-namesrv:
+        condition: service_healthy
+      nacos:
+        condition: service_healthy
+    profiles: ["app"]
+
+  # ===================== 前端（profile: app） =====================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: gx-frontend
+    container_name: gx-frontend
+    ports:
+      - "8088:80"
+    depends_on:
+      - gateway
+    profiles: ["app"]

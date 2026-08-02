@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    nacos:
+      # 配置中心（本脚手架默认关闭，全部配置写在 application.yml；如需远程配置改为 true）
+      config:
+        enabled: false
+        file-extension: yaml
+      # 注册中心：启动前请先运行 Nacos（默认 8848）
+      discovery:
+        enabled: true
+        server-addr: 127.0.0.1:8848
+        namespace: guanxuege

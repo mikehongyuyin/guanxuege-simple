@@ -1,0 +1,36 @@
+server:
+  port: 8804
+
+spring:
+  application:
+    name: guanxuege-community
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/guanxuege?useUnicode=true&characterEncoding=utf8mb4&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 3
+      timeout: 3000ms
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: guanxuege-community-producer
+    send-message-timeout: 3000
+  consumer:
+    group: guanxuege-community-consumer
+    # 帖子热度统计消费者，监听 gx-post-event
