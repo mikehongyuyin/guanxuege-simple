@@ -31,7 +31,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String path = request.getRequestURI();
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod()) || WHITE_LIST.contains(path)) {
+        // 放行：预检、登录/注册、上传的静态图片（评论图片需公开可见）
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())
+                || WHITE_LIST.contains(path)
+                || path.startsWith("/api/images/")) {
             filterChain.doFilter(request, response);
             return;
         }

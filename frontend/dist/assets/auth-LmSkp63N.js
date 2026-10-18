@@ -1,1 +1,0 @@
-import{r as e}from"./request-BuJ9eJA9.js";function i(t,r){return e.post("/auth/login",{phone:t,password:r})}function u(t){return e.post("/auth/register",t)}function l(){return e.get("/child/list")}function o(t){return e.post("/child",t)}function s(t){return e.put("/child",t)}function c(t){return e.delete(`/child/${t}`)}export{o as c,c as d,l as g,i as l,u as r,s as u};

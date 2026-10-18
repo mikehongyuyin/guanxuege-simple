@@ -183,4 +183,19 @@ async function onDelete(row) {
 .table-card { padding: 22px; }
 .table-card h3 { font-family: var(--gx-font-serif); font-size: 18px; margin: 0; }
 .table-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+
+/* ===== 移动端适配（<768px） ===== */
+@media (max-width: 767px) {
+  .ov-cards { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ov-card { padding: 14px 10px; }
+  .ov-num { font-size: 24px; }
+  .chart-card { padding: 16px 12px; }
+  .chart-card h3 { font-size: 17px; }
+  .bars { gap: 12px; padding: 0 4px; height: 190px; }
+  .bar-wrap { width: 34px; }
+  .subject-cards { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .sc { padding: 14px 12px; }
+  .table-card { padding: 14px 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-card :deep(.el-table) { min-width: 560px; }
+}
 </style>

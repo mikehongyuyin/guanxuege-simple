@@ -42,6 +42,16 @@
         >
           {{ mode === 'login' ? '登 录' : '注 册 并 登 录' }}
         </el-button>
+
+        <div v-if="mode === 'register'" class="auth-agree">
+          <el-checkbox v-model="agreed" size="small">
+            <span class="agree-text">我已阅读并同意
+              <router-link to="/privacy" class="lnk" target="_blank">《用户协议》</router-link>、
+              <router-link to="/privacy" class="lnk" target="_blank">《隐私政策》</router-link>
+              及<router-link to="/child-protection" class="lnk" target="_blank">《儿童个人信息保护规则》</router-link>
+            </span>
+          </el-checkbox>
+        </div>
       </el-form>
 
       <p v-if="error" class="auth-tip">{{ error }}</p>
@@ -64,6 +74,7 @@ const mode = ref('login')
 const loading = ref(false)
 const error = ref('')
 const formRef = ref()
+const agreed = ref(false)
 
 const form = reactive({ phone: '', password: '', nickname: '' })
 
@@ -87,10 +98,17 @@ async function onSubmit() {
   error.value = ''
   try {
     if (mode.value === 'register') {
+      if (!agreed.value) {
+        error.value = '请先阅读并勾选同意《用户协议》《隐私政策》及《儿童个人信息保护规则》'
+        loading.value = false
+        return
+      }
       await apiRegister({
         phone: form.phone,
         password: form.password,
-        nickname: form.nickname
+        nickname: form.nickname,
+        privacyAgreed: true,
+        consentVersion: '1.0'
       })
     }
     // 注册或登录后统一走登录拿 token
@@ -116,6 +134,7 @@ async function onSubmit() {
 }
 .auth-card {
   width: 380px;
+  max-width: 100%;
   background: var(--gx-warm-white);
   border: 1px solid var(--gx-divider);
   border-radius: 16px;
@@ -171,5 +190,22 @@ async function onSubmit() {
   font-size: 13px;
   text-align: center;
   margin: 12px 0 0;
+}
+.auth-agree {
+  margin-top: 12px;
+  padding: 8px 10px;
+  background: rgba(177, 57, 46, 0.04);
+  border-radius: 8px;
+}
+.agree-text { font-size: 12.5px; color: var(--gx-sub); line-height: 1.6; }
+.lnk { color: var(--gx-vermillion); text-decoration: none; }
+.lnk:hover { text-decoration: underline; }
+
+/* ===== 移动端 <768px：输入字号≥16px 防 iOS 聚焦缩放 ===== */
+@media (max-width: 767px) {
+  .auth-page { padding: 16px; }
+  .auth-card :deep(.el-input__inner) {
+    font-size: 16px;
+  }
 }
 </style>

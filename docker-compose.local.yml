@@ -1,0 +1,30 @@
+# 本机覆写文件（Local Override）
+#
+# 用途：本机已用 Maven/npm 编译好产物（jar / dist），镜像直接 COPY 产物，
+#       避免容器内下载依赖导致构建缓慢或受网络影响。
+#
+# 用法：
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
+#
+# 说明：
+#   - 本文件只覆写 app / frontend 两个服务的构建方式，其余沿用 docker-compose.yml
+#   - 【重要】未涉及 mysql 服务，且数据使用命名卷 mysql-data，
+#     重建 app / frontend 容器不会影响数据库数据
+#   - 服务器部署请继续用原 docker-compose.yml（容器内自包含构建）
+#
+# 前置：
+#   1) 后端：backend 目录执行 mvn package -DskipTests → target/guanxuege-simple.jar
+#   2) 前端：frontend 目录执行 npm run build        → dist/
+
+services:
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.local
+    image: gx-app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.local
+    image: gx-frontend

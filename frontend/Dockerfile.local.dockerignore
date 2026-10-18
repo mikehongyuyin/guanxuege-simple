@@ -1,0 +1,11 @@
+# 仅对 Dockerfile.local 生效的构建上下文裁剪（不影响容器内自包含的 Dockerfile）
+node_modules
+src
+dist_verify
+.vite
+*.md
+vite.config.js
+vite.config.js.timestamp-*
+package.json
+package-lock.json
+index.html

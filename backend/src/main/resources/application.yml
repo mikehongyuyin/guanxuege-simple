@@ -1,9 +1,17 @@
 server:
   port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
 
 spring:
   application:
     name: guanxuege-simple
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 20MB
   jackson:
     serialization:
       write-dates-as-timestamps: false
@@ -20,12 +28,6 @@ spring:
       max-lifetime: 1800000
       minimum-idle: 1
       maximum-pool-size: 10
-  data:
-    redis:
-      host: ${REDIS_HOST:127.0.0.1}
-      port: 6379
-      database: 0
-      timeout: 3000ms
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml

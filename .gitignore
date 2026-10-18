@@ -1,0 +1,56 @@
+# ============================================================
+# 观学阁 · Git 忽略规则
+# 上传到公开仓库前，务必确认本文件已覆盖所有敏感信息
+# ============================================================
+
+# ---------- 1. 敏感凭据（绝对不能公开）----------
+# 环境变量：含 JWT 签名密钥、数据库口令等
+.env
+.env.*
+!.env.example
+
+# 证书私钥 / SSH 登录密钥
+*.key
+*.pem
+*.p8
+*.pkcs12
+deploy/ssl/
+
+# 服务器部署脚本（含真实公网 IP，已脱敏为模板）
+deploy/upload_to_server.ps1
+
+# ---------- 2. 构建产物 ----------
+# 后端
+backend/target/
+target/
+
+# 前端
+frontend/node_modules/
+frontend/dist/
+frontend/dist_verify/
+frontend/.vite/
+.vite/
+
+# ---------- 3. 运行时生成物 ----------
+# 用户上传的图片（运行时产生，不应进仓库）
+backend/images/*
+!backend/images/.gitkeep
+
+# 日志
+*.log
+logs/
+
+# ---------- 4. 编辑器 / 系统 ----------
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+Thumbs.db
+
+# Vite 临时文件
+vite.config.js.timestamp-*
+
+# 本地工具目录（非项目源码）
+.pai/

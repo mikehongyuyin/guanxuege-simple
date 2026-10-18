@@ -5,6 +5,8 @@ import com.guanxuege.common.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.LocalDate;
+
 /**
  * 孩子档案（一个家长可关联多个孩子）
  */
@@ -27,4 +29,16 @@ public class Child extends BaseEntity {
 
     /** 头像 */
     private String avatar;
+
+    /** 出生日期 */
+    private LocalDate birthday;
+
+    /** 性别 1 男 / 2 女 */
+    private Integer gender;
+
+    /** 性格特点（逗号分隔标签） */
+    private String personality;
+
+    /** 兴趣特长（逗号分隔标签） */
+    private String interests;
 }

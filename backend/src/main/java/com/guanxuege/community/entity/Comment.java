@@ -25,6 +25,12 @@ public class Comment extends BaseEntity {
     /** 评论内容 */
     private String content;
 
+    /** 评论图片（JSON 数组，如 ["/api/images/xx.jpg"]） */
+    private String images;
+
+    /** 命中焦虑词标记：1 是 / 0 否 */
+    private Integer anxietyFlag;
+
     /** 点赞数 */
     private Integer likeCount;
 }

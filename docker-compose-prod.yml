@@ -1,0 +1,57 @@
+# 观学阁 生产部署编排（云服务器专用，带 MySQL 数据卷，删容器不丢数据）
+#
+# 使用：docker compose -f docker-compose-prod.yml up -d
+# 说明：镜像建议由本地 docker save/load 传入（gx-app / gx-frontend / mysql:8.0）
+#       已加载镜像时不会触发 build；未加载时会尝试拉基础镜像构建（需配好镜像加速器）
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: gx-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: guanxuege
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    volumes:
+      - ./backend/sql/:/docker-entrypoint-initdb.d/:ro
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ===================== 后端单体应用 =====================
+  app:
+    build: ./backend
+    image: gx-app
+    container_name: gx-app
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: mysql
+      # 生产环境强制要求注入 JWT 密钥，未设置时 compose 拒绝启动（安全护栏）
+      # 生成方式：openssl rand -base64 48
+      JWT_SECRET: ${JWT_SECRET:?必须设置环境变量 JWT_SECRET（>=32 字符），否则任何人可伪造登录凭证}
+    volumes:
+      # 上传的图片持久化：容器内 /app/images <-> 宿主机 backend/images
+      - ./backend/images:/app/images
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # ===================== 前端 =====================
+  frontend:
+    build: ./frontend
+    image: gx-frontend
+    container_name: gx-frontend
+    ports:
+      - "8088:80"
+    depends_on:
+      - app
+
+volumes:
+  mysql-data:

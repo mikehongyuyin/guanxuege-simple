@@ -21,11 +21,23 @@ public class User extends BaseEntity {
     @JsonIgnore
     private String password;
 
-    /** 昵称 */
+    /** 账号昵称 */
     private String nickname;
+
+    /** 社区昵称：设置后在社区内替代账号昵称展示 */
+    private String communityNickname;
 
     /** 头像 URL */
     private String avatar;
+
+    /** 微信号（仅本人可见，查看他人资料时不返回） */
+    private String wechat;
+
+    /** 邮箱（仅本人可见，查看他人资料时不返回） */
+    private String email;
+
+    /** 个性签名（公开展示） */
+    private String signature;
 
     /** 角色：1 家长 / 2 管理员 */
     private Integer role;

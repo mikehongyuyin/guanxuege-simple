@@ -27,3 +27,15 @@ export function updateChild(child) {
 export function deleteChild(id) {
   return request.delete(`/child/${id}`)
 }
+
+export function getFamily() {
+  return request.get('/family')
+}
+
+export function createFamily(family) {
+  return request.post('/family', family)
+}
+
+export function updateFamily(family) {
+  return request.put('/family', family)
+}

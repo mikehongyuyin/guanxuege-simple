@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 462" width="680" height="462">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect x="110" y="30" width="300" height="40" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="260" y="50" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="500" fill="#2C2C2A">浏览器 / 移动端</text>
+
+  <path d="M260 72 L260 88" fill="none" stroke="#888780" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="110" y="92" width="300" height="40" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="260" y="112" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="500" fill="#04342C">Vue 3 + Vite + Pinia + Element Plus</text>
+
+  <path d="M260 134 L260 150" fill="none" stroke="#888780" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="110" y="154" width="300" height="40" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="260" y="174" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="500" fill="#2C2C2A">Nginx 同域反代 /api/**</text>
+
+  <path d="M260 196 L260 212" fill="none" stroke="#888780" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="110" y="216" width="300" height="40" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="260" y="236" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="500" fill="#042C53">Controller：参数接收 + 归属校验</text>
+
+  <path d="M260 258 L260 274" fill="none" stroke="#888780" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="110" y="278" width="300" height="40" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+  <text x="260" y="298" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="500" fill="#26215C">Service：业务逻辑 + 事务边界</text>
+
+  <path d="M260 320 L260 336" fill="none" stroke="#888780" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="110" y="340" width="300" height="40" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="260" y="360" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="500" fill="#042C53">Mapper：MyBatis-Plus</text>
+
+  <path d="M260 382 L260 398" fill="none" stroke="#888780" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="110" y="402" width="300" height="40" rx="8" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="260" y="422" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="500" fill="#412402">MySQL 8.0（utf8mb4）</text>
+
+  <rect x="440" y="206" width="200" height="132" rx="12" fill="#FFFFFF" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="5 4"/>
+  <text x="540" y="230" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="13" font-weight="500" fill="#2C2C2A">横切能力</text>
+  <text x="540" y="254" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="12" fill="#5F5E5A">JWT 过滤器鉴权</text>
+  <text x="540" y="274" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="12" fill="#5F5E5A">归属校验（403）</text>
+  <text x="540" y="294" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="12" fill="#5F5E5A">Caffeine 缓存</text>
+  <text x="540" y="314" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="12" fill="#5F5E5A">全局异常处理</text>
+
+  <path d="M412 236 L438 236" fill="none" stroke="#B4B2A9" stroke-width="1" stroke-dasharray="4 3"/>
+  <path d="M412 298 L438 298" fill="none" stroke="#B4B2A9" stroke-width="1" stroke-dasharray="4 3"/>
+</svg>

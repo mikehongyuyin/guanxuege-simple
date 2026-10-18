@@ -5,7 +5,7 @@ cd /d "%~dp0"
 echo ============================================
 echo   观学阁 GuanXueGe 单体版 一键启动
 echo ============================================
-echo   [1] 仅启动中间件 (MySQL / Redis)
+echo   [1] 仅启动中间件 (MySQL)
 echo   [2] 全栈启动 (单体后端 + 前端, 首次会构建镜像)
 echo ============================================
 set /p CHOICE=请选择 [1/2]，默认 2: 
@@ -15,9 +15,9 @@ goto :fullstack
 :middleware
 echo.
 echo 正在启动中间件...
-docker compose up -d mysql redis
+docker compose up -d mysql
 echo.
-echo 中间件已启动。MySQL: localhost:3306 (root/root)  Redis: localhost:6379
+echo 中间件已启动。MySQL: localhost:3306 (root/123456)
 goto :done
 
 :fullstack

@@ -18,6 +18,13 @@ public class GlobalExceptionHandler {
                 .body(R.fail(e.getCode(), e.getMessage()));
     }
 
+    /** 越权访问：资源不属于当前用户，返回 403 */
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<R<Void>> handleForbidden(ForbiddenException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(R.fail(403, e.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<R<Void>> handle(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

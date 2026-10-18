@@ -105,7 +105,10 @@
         <div><b>关于</b><span>品牌理念</span><span>家长公约</span></div>
         <div><b>联系</b><span>客服</span><span>合作</span></div>
       </div>
-      <div class="f-bottom">版权所有 2026 观学阁 GuanXueGe · 用心陪伴每一个家庭</div>
+      <div class="f-bottom">
+        <span>版权所有 2026 观学阁 GuanXueGe · 用心陪伴每一个家庭</span>
+        <a class="beian" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">湘ICP备2026034128号</a>
+      </div>
     </footer>
   </div>
 </template>
@@ -173,5 +176,34 @@
 .f-cols { display: flex; gap: 60px; margin-bottom: 24px; }
 .f-cols b { display: block; margin-bottom: 10px; color: #fff; }
 .f-cols span { display: block; font-size: 13px; color: #cbbfa9; margin-bottom: 6px; }
-.f-bottom { border-top: 1px solid #4a4239; padding-top: 18px; font-size: 13px; color: #cbbfa9; }
+.f-bottom { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #4a4239; padding-top: 18px; font-size: 13px; color: #cbbfa9; }
+.beian { color: #cbbfa9; text-decoration: none; }
+.beian:hover { color: #fff; }
+
+/* ===== 移动端 <768px 适配 ===== */
+@media (max-width: 767px) {
+  .h-header { padding: 12px 16px; gap: 12px; }
+  .h-nav { display: none; }
+  .h-cta { padding: 8px 16px; font-size: 14px; }
+
+  .h-hero { flex-direction: column; align-items: stretch; gap: 28px; padding: 40px 20px; }
+  .h-hero-text h1 { font-size: 34px; }
+  .h-hero-text p { font-size: 15px; }
+  .h-hero-btns { flex-wrap: wrap; }
+  .ink-card { width: 100%; max-width: 340px; margin: 0 auto; box-sizing: border-box; }
+
+  .h-section { padding: 40px 20px; }
+  .h-h2 { font-size: 26px; margin-bottom: 26px; }
+  .h-cards { grid-template-columns: 1fr; }
+  .h-steps { grid-template-columns: 1fr; }
+  .h-stats { grid-template-columns: repeat(2, 1fr); }
+  .h-quotes { grid-template-columns: 1fr; }
+
+  .h-cta-band { padding: 48px 20px; }
+  .h-cta-band h2 { font-size: 24px; }
+
+  .h-footer { padding: 32px 20px; }
+  .f-cols { flex-direction: column; gap: 24px; }
+  .f-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
 </style>

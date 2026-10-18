@@ -23,3 +23,15 @@ export function deletePlan(id) {
 export function planTasks(planId) {
   return request.get('/plan/task/list', { params: { planId } })
 }
+
+export function createPlanTask(task) {
+  return request.post('/plan/task', task)
+}
+
+export function taskCheckin(taskId, childId, note = '') {
+  return request.post(`/plan/task/${taskId}/checkin`, { childId, note })
+}
+
+export function taskCheckinStatus(taskId, childId) {
+  return request.get(`/plan/task/${taskId}/checkin/status`, { params: { childId } })
+}

@@ -22,8 +22,20 @@ public class Post extends BaseEntity {
     /** 正文 */
     private String content;
 
+    /** 帖子图片（JSON 数组，如 ["/api/images/xx.jpg"]） */
+    private String images;
+
     /** 标签，如「习惯养成」「成绩交流」 */
     private String tag;
+
+    /** 所属圈子 id（分层圈子） */
+    private Long circleId;
+
+    /** 所属社区：parenting 育儿 / voice 心声 */
+    private String community;
+
+    /** 命中焦虑词标记：1 是 / 0 否 */
+    private Integer anxietyFlag;
 
     /** 浏览数 */
     private Integer viewCount;

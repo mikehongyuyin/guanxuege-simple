@@ -15,8 +15,10 @@ public class TopicController {
     @Autowired
     private TopicService topicService;
 
+    /** 热议话题：传 community 只统计该社区，不传则统计全部 */
     @GetMapping("/hot")
-    public R<List<Topic>> hot(@RequestParam(defaultValue = "10") int limit) {
-        return R.ok(topicService.hotList(limit));
+    public R<List<Topic>> hot(@RequestParam(defaultValue = "10") int limit,
+                              @RequestParam(required = false) String community) {
+        return R.ok(topicService.hotList(limit, community));
     }
 }
